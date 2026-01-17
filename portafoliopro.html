@@ -11,6 +11,10 @@
 
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
+  html {
+  scroll-behavior: smooth;
+  image-rendering: crisp-edges;
+}
   body, html {
     width:100%; height:100%;
     background:#0a0f25;
@@ -41,19 +45,40 @@
 
   /* Header */
   header { width:100%; text-align:center; position:relative; z-index:1000; padding-top:40px; }
-  #brand-name {
-  font-family: 'Orbitron', 'Audiowide', 'Exo 2', sans-serif;
-  font-size: 4rem;
+  /* Limpieza y base del nombre */
+#brand-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3.2rem;
   color: #00ffff;
-  text-shadow: 0 0 2px #00ffff, 0 0 2px #00ffff, 0 0 8px #00ffff, 0 0 6px #00ffff;
+  text-align: center;
+  min-height: 1.2em;
+  display: block;
+  visibility: hidden; /* Oculto hasta que termine la cuenta atrás */
+  text-shadow: 0 0 10px #00ffff;
+}
+/* El cursor que parpadea */
+.cursor {
+  display: inline-block;
+  width: 10px;
+  background-color: #00ffff;
+  margin-left: 5px;
+  animation: blink 0.7s infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+#brand-subtitle {
   opacity: 0;
-  transform: translateY(50px) scale(0.3);
-  animation: neon-glow 3s infinite alternate;
-  }
+  font-size: 1.6rem;
+  margin-top: 10px;
+  text-align: center;
+}
   
   #brand-subtitle {
     font-family: 'Orbitron', 'Audiowide', 'Exo 2', sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   color: #00ffff;
   text-shadow: 0 0 2px #00ffff;
   margin-top: 10px;
@@ -101,10 +126,10 @@ main {
   min-height: 150px;
   padding: 25px;
   border-radius: 15px;
-  
+  transform-origin: top center;
   color: #00ffff;
   font-family: 'Roboto', sans-serif;
-  font-size: 1rem;
+  font-size: 1.1rem;
   line-height: 1.6;
   box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff inset;
   opacity: 0;              /* oculto por defecto */
@@ -126,8 +151,8 @@ main {
   font-family: 'Orbitron', sans-serif; /* mantener futurista para títulos */
   font-size: 2rem;
   margin-bottom: 5px;
-  color: #00ffff;
-  text-shadow: 0 0 2px #00ffff, 0 0 5px #00ffff;
+  color: #2b97fa;
+  text-shadow: 0 0 2px #2b97fa, 0 0 5px #2b97fa;
 }
 
 /* Enlaces dentro de tarjetas en cajas */
@@ -155,7 +180,28 @@ main {
 .card li {
   margin-bottom: 0.6rem;
 }
+.card::before, .card::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #00ffff;
+  opacity: 0.5;
+}
 
+.card::before {
+  top: 10px;
+  left: 10px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.card::after {
+  bottom: 10px;
+  right: 10px;
+  border-left: none;
+  border-top: none;
+}
 /* Notas de proyecto */
 .project-note {
   font-style: italic;
@@ -168,10 +214,11 @@ main {
   text-decoration: none;
   color: #0a0f25;
   background: #00ffff;
-  padding: 6px 12px;
+  padding: 0 5px 0 5px;
   border-radius: 6px;
-  margin: 4px 4px 4px 0;
+  margin: 0px 2px 2px 2px;
   transition: 0.3s;
+  height: 25px;
 }
 .project-links a:hover {
   background: #00cccc;
@@ -180,7 +227,7 @@ main {
 
 .card.show {
   opacity: 1;
-  transform: translateX(-50%) scale(1); /* animación a tamaño normal */
+  transform: translateX(-50%) scale(0.85); /* animación a tamaño normal */
 }
 
 .skills-grid {
@@ -245,12 +292,11 @@ main {
 /* Contenedor principal de los slides */
 .experience-slider {
   position: relative;
-  /* Ajusta estos 450px según la ficha que tenga más texto */
-  min-height: 450px; 
+  min-height: 400px; 
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  margin-bottom: 60px; /* Espacio para que los botones no tapen el texto */
+  padding-bottom: 60px; /* Crea un "escudo" para que el texto no llegue a los botones */
 }
 
 /* Estado base de la ficha (oculta y desplazada) */
@@ -289,18 +335,17 @@ main {
 /* Panel de controles FIJO */
 .exp-controls {
   position: absolute;
-  bottom: 0;
+  bottom: 25px;      /* Los pega al margen inferior (coincide con el padding de la tarjeta) */
   left: 50%;
-  transform: translateX(-50%); /* Centrado exacto */
-  width: 100%;
+  transform: translateX(-50%);
+  width: calc(100% - 50px); /* Ajustado al ancho interno de la tarjeta */
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 20px;
-  padding: 15px 0;
-  background: linear-gradient(to top, rgba(0,20,20,0.8), transparent); /* Sutil degradado de fondo */
-  border-top: 1px solid rgba(0, 255, 255, 0.1);
   z-index: 10;
+  background: none;  /* Eliminamos fondos para que se vea limpio */
+  border: none;
 }
 
 .exp-controls button {
@@ -437,7 +482,7 @@ main {
 .contact-hex {
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding: 0px;
   background: rgba(0, 255, 255, 0.03);
   border: 1px solid rgba(0, 255, 255, 0.2);
   border-radius: 4px; /* Estilo más cuadrado/tecnológico */
@@ -458,8 +503,8 @@ main {
 
 /* Iconos */
 .hex-icon {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -520,7 +565,7 @@ main {
   padding: 20px;
   position: relative;
   transition: all 0.3s ease;
-  clip-path: polygon(0 0, 100% 0, 100% 85%, 90% 100%, 0 100%); /* Esquina cortada futurista */
+  
 }
 
 .skill-module:hover {
@@ -576,6 +621,7 @@ main {
   margin-top: 20px;
   display: flex;
   gap: 5px;
+  display: none; /* Esto elimina los rombos visualmente */
 }
 
 .module-deco span {
@@ -702,7 +748,7 @@ main {
 
 .bio-text p {
   font-size: 1.05rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: #00ffff;
   margin-bottom: 15px;
 }
 
@@ -814,6 +860,22 @@ main {
   from { text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff; }
   to { text-shadow: 0 0 15px #00ffff, 0 0 25px #00ffff; }
 }
+@keyframes glitch-opacity {
+  0% { opacity: 0.8; }
+  45% { opacity: 0.8; }
+  50% { opacity: 0.4; }
+  55% { opacity: 0.9; }
+  100% { opacity: 0.8; }
+}
+
+.avatar-frame i {
+  animation: glitch-opacity 4s infinite; /* El icono del usuario parpadeará suavemente */
+}
+::selection {
+  background: rgba(0, 255, 255, 0.3);
+  color: #ffffff;
+  text-shadow: 0 0 5px #00ffff;
+}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
@@ -900,7 +962,7 @@ Especializado en ofimática avanzada, soporte administrativo remoto y gestión d
           <li>Gestión administrativa y organización de información.</li>
           
           <li>Desarrollo y mantenimiento de sitios web corporativos.</li>
-          <li>Gestión de visibilidad digital, SEO y presencia en Google Business Profile y buscadores.</li>
+          <li>Gestión de visibilidad digital, SEO y Google Business Profile y buscadores.</li>
           <li>Proyecto Ricaurte Mascotas y gestión de documentación de mascotas</li>
           
           <div class="project-links">
@@ -971,7 +1033,7 @@ Especializado en ofimática avanzada, soporte administrativo remoto y gestión d
     <div class="skill-module">
       <div class="module-header">
         <i class="fas fa-folder-open"></i>
-        <h3>Gestión Administrativa</h3>
+        <h3>Gestión Datos</h3>
       </div>
       <div class="skill-tags">
         <span class="tag"><i class="fas fa-caret-right"></i> Gestión documental</span>
@@ -1091,34 +1153,73 @@ function animate(){
 animate();
 window.addEventListener('resize',()=>{canvas.width=window.innerWidth; canvas.height=window.innerHeight;});
 
-/* Cuenta atrás */
-const countdownEl=document.getElementById('countdown');
-const countdownContainer=document.getElementById('countdown-container');
-let count=3;
-const interval=setInterval(()=>{
-  countdownEl.textContent=count;
-  countdownEl.style.animation='fadeInScale 0.3s ease-in-out';
-  count--;
-  if(count<0){
-    clearInterval(interval);
-    countdownContainer.style.display='none';
-    // Después de esconder la cuenta atrás, mostrar nombre
-    showName();
-  }
-},500);
+/* --- SISTEMA DE ENTRADA SINCRONIZADO --- */
+const countdownEl = document.getElementById('countdown');
+const countdownContainer = document.getElementById('countdown-container');
+const nameEl = document.getElementById('brand-name');
+const subEl = document.getElementById('brand-subtitle');
+const nav = document.querySelector('.main-nav');
 
-/* Mostrar nombre y subtítulo con animación, luego navbar */
-function showName(){
-  const name=document.getElementById('brand-name');
-  const sub=document.getElementById('brand-subtitle');
-  name.style.opacity='1';
-  name.style.animation='flyIn 3s forwards ease-out';
-  sub.style.opacity='1';
-  sub.style.animation='flyIn 3s forwards ease-out';
-  // Mostrar navbar después de 3s
-  setTimeout(()=>document.querySelector('.main-nav').classList.add('show'),3000);
+let count = 3;
+
+// 1. Manejo de la Cuenta Atrás
+const countInterval = setInterval(() => {
+  countdownEl.textContent = count;
+  count--;
+
+  if (count < -1) {
+    clearInterval(countInterval);
+    countdownContainer.style.display = 'none';
+    startTechnicalTyping(); // Inicia la secuencia
+  }
+}, 600);
+
+// 2. Función de escritura (Lenta y con brillo progresivo)
+function startTechnicalTyping() {
+  const text = "Víctor Vargas Cadaveira";
+  nameEl.style.visibility = "visible";
+  nameEl.innerHTML = '<span id="typing-text"></span><span class="cursor">&nbsp;</span>';
+  
+  const typingTarget = document.getElementById('typing-text');
+  let charIndex = 0;
+
+  function type() {
+    if (charIndex < text.length) {
+      // Crear letra con efecto de encendido
+      const span = document.createElement('span');
+      span.textContent = text[charIndex];
+      span.style.color = "rgba(0,255,255,0.2)";
+      span.style.transition = "all 0.4s ease";
+      
+      typingTarget.appendChild(span);
+      
+      // Iluminar la letra casi al instante
+      setTimeout(() => {
+        span.style.color = "#00ffff";
+        span.style.textShadow = "0 0 15px #00ffff";
+      }, 50);
+
+      charIndex++;
+      setTimeout(type, 100); // Velocidad pausada
+    } else {
+      // Final de la escritura
+      document.querySelector('.cursor').style.display = 'none';
+      finishSequence();
+    }
+  }
+  type();
 }
 
+// 3. Finalizar con subtítulo y menú
+function finishSequence() {
+  subEl.style.transition = "all 1.5s ease";
+  subEl.style.opacity = "1";
+  subEl.style.transform = "translateY(0)";
+  
+  setTimeout(() => {
+    nav.classList.add('show');
+  }, 1000);
+}
 /* Tarjetas al pulsar navbar */
 const navButtons=document.querySelectorAll('.main-nav a');
 const cards=document.querySelectorAll('.card');
@@ -1205,7 +1306,7 @@ window.addEventListener('load', () => {
       
       console.log("Sistema cargado: Perfil del operador desplegado.");
     }
-  }, 6500); // 6.5 segundos de espera
+  }, 7500); // 6.5 segundos de espera
 });
 </script>
 
