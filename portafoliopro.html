@@ -105,6 +105,69 @@
     transition:0.3s;
   }
   nav a:hover { background:rgba(0,255,255,0.1); box-shadow:0 0 10px #00ffff; }
+@media (max-width: 768px) {
+
+  /* NAVBAR CONTENEDOR */
+  header nav.main-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    margin-top: 25px;
+  }
+
+  /* BOTONES */
+  header nav.main-nav a {
+    width: 85%;
+    max-width: 280px;
+    text-align: center;
+    margin: 0;
+    padding: 10px 0;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+
+    /* Futurista estable */
+    background: rgba(0, 255, 255, 0.05);
+    border: 1px solid rgba(0, 255, 255, 0.4);
+    box-shadow:
+      0 0 6px rgba(0,255,255,0.4),
+      inset 0 0 8px rgba(0,255,255,0.15);
+    backdrop-filter: blur(4px);
+
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* EFECTO DE ESCANEO AL PULSAR */
+  header nav.main-nav a::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 120%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(0,255,255,0.25),
+      transparent
+    );
+    transition: left 0.4s ease;
+  }
+
+  header nav.main-nav a:active::after {
+    left: 120%;
+  }
+
+  /* EFECTO DE PRESIÓN */
+  header nav.main-nav a:active {
+    transform: scale(0.96);
+    box-shadow:
+      0 0 12px rgba(0,255,255,0.8),
+      inset 0 0 12px rgba(0,255,255,0.4);
+  }
+}
 
   /* Tarjetas */
 main {
