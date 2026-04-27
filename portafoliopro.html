@@ -1,0 +1,1661 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portafolio Futurista</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+        image-rendering: crisp-edges;
+      }
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+        background: #0a0f25;
+        font-family: "Orbitron", sans-serif;
+        color: #00ffff;
+        overflow-x: hidden;
+      }
+      canvas {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 0;
+      }
+
+      /* Cuenta atrás */
+      #countdown-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+        pointer-events: none;
+      }
+      #countdown {
+        font-size: 8rem;
+        color: #00ffff;
+        text-shadow:
+          0 0 10px #00ffff,
+          0 0 20px #00ffff,
+          0 0 30px #00ffff;
+        animation: fadeInScale 0.3s ease-in-out;
+      }
+      @keyframes fadeInScale {
+        0% {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.2);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      /* Header */
+      header {
+        width: 100%;
+        text-align: center;
+        position: relative;
+        z-index: 1000;
+        padding-top: 40px;
+      }
+      /* Limpieza y base del nombre */
+      #brand-name {
+        font-family: "Orbitron", sans-serif;
+        font-size: 3.2rem;
+        color: #00ffff;
+        text-align: center;
+        min-height: 1.2em;
+        display: block;
+        visibility: hidden; /* Oculto hasta que termine la cuenta atrás */
+        text-shadow: 0 0 10px #00ffff;
+      }
+      /* El cursor que parpadea */
+      .cursor {
+        display: inline-block;
+        width: 10px;
+        background-color: #00ffff;
+        margin-left: 5px;
+        animation: blink 0.7s infinite;
+      }
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+
+      #brand-subtitle {
+        opacity: 0;
+        font-size: 1.6rem;
+        margin-top: 10px;
+        text-align: center;
+      }
+
+      #brand-subtitle {
+        font-family: "Orbitron", "Audiowide", "Exo 2", sans-serif;
+        font-size: 1.5rem;
+        color: #00ffff;
+        text-shadow: 0 0 2px #00ffff;
+        margin-top: 10px;
+        opacity: 0;
+        transform: translateY(50px) scale(0.3);
+      }
+
+      @keyframes flyIn {
+        0% {
+          opacity: 0;
+          transform: translateY(50px) scale(0.3);
+        }
+        50% {
+          opacity: 1;
+          transform: translateY(10px) scale(1.1);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      /* Navbar */
+      nav {
+        margin-top: 25px;
+        opacity: 0;
+        transform: scale(0.3);
+        transition: all 0.5s ease-out;
+      }
+      nav.show {
+        opacity: 1;
+        transform: scale(1);
+      }
+      nav a {
+        color: #00ffff;
+        text-decoration: none;
+        margin: 0 15px;
+        font-size: 1.2rem;
+        border: 1px solid rgba(0, 255, 255, 0.3);
+        border-radius: 10px;
+        padding: 5px 10px;
+        text-shadow:
+          0 0 3px #00ffff,
+          0 0 6px #00ffff;
+        transition: 0.3s;
+      }
+      nav a:hover {
+        background: rgba(0, 255, 255, 0.1);
+        box-shadow: 0 0 10px #00ffff;
+      }
+      @media (max-width: 768px) {
+        /* NAVBAR CONTENEDOR */
+        header nav.main-nav {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 14px;
+          margin-top: 25px;
+        }
+
+        /* BOTONES */
+        header nav.main-nav a {
+          width: 85%;
+          max-width: 280px;
+          text-align: center;
+          margin: 0;
+          padding: 10px 0;
+          font-size: 1.1rem;
+          letter-spacing: 2px;
+
+          /* Futurista estable */
+          background: rgba(0, 255, 255, 0.05);
+          border: 1px solid rgba(0, 255, 255, 0.4);
+          box-shadow:
+            0 0 6px rgba(0, 255, 255, 0.4),
+            inset 0 0 8px rgba(0, 255, 255, 0.15);
+          backdrop-filter: blur(4px);
+
+          transition: all 0.25s ease;
+          position: relative;
+          overflow: hidden;
+        }
+
+        /* EFECTO DE ESCANEO AL PULSAR */
+        header nav.main-nav a::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: -120%;
+          width: 120%;
+          height: 100%;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 255, 255, 0.25),
+            transparent
+          );
+          transition: left 0.4s ease;
+        }
+
+        header nav.main-nav a:active::after {
+          left: 120%;
+        }
+
+        /* EFECTO DE PRESIÓN */
+        header nav.main-nav a:active {
+          transform: scale(0.96);
+          box-shadow:
+            0 0 12px rgba(0, 255, 255, 0.8),
+            inset 0 0 12px rgba(0, 255, 255, 0.4);
+        }
+      }
+
+      /* Tarjetas */
+      main {
+        position: relative; /* relativo para las tarjetas absolutas */
+        width: 100%;
+        padding-top: 10px; /* pequeño espacio debajo del navbar */
+        height: auto; /* se ajusta al contenido de la tarjeta visible */
+      }
+
+      /* Tarjetas más legibles */
+      .card {
+        position: absolute; /* mantener todas en el mismo lugar */
+        top: 30px; /* separación desde navbar */
+        left: 50%; /* centro horizontal */
+        transform: translateX(-50%) scale(0.3); /* escala inicial pequeña */
+        width: 700px;
+        max-width: 90%;
+        min-height: 150px;
+        padding: 25px;
+        border-radius: 15px;
+        transform-origin: top center;
+        color: #00ffff;
+        font-family: "Roboto", sans-serif;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        box-shadow:
+          0 0 10px #00ffff,
+          0 0 20px #00ffff inset;
+        opacity: 0; /* oculto por defecto */
+        z-index: 100;
+        transition: all 0.6s ease-out;
+        background-color: #000d0d;
+        /* Patrón de circuitos sutil */
+        background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg stroke='%2300ffff' stroke-width='0.5' stroke-opacity='0.1'%3E%3Cpath d='M50 0h2v40h-2V0zm0 40h30v2H50v-2zm-20 0h20v2H30v-2zm10 0V20h2v20h-2V20zm30 0h10v2H70v-2zM30 42h2v38h-2V42zm10 0h2v20h-2V42zm30 0h2v10h-2V42zM0 40h30v2H0v-2zm0-20h10v2H0v-2zm30 0h10v2H30v-2zM18 10h2v10h-2V10zm10 0h2v5h-2v-5z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      }
+
+      /* Separación entre párrafos */
+      .card p {
+        margin-bottom: 1rem;
+      }
+
+      /* Encabezados dentro de tarjetas */
+      .card h2 {
+        font-family:
+          "Orbitron", sans-serif; /* mantener futurista para títulos */
+        font-size: 2rem;
+        margin-bottom: 5px;
+        color: #2b97fa;
+        text-shadow:
+          0 0 2px #2b97fa,
+          0 0 5px #2b97fa;
+      }
+
+      /* Enlaces dentro de tarjetas en cajas */
+      .card a {
+        display: inline-block;
+        text-decoration: none;
+        color: #0a0f25; /* texto oscuro para contraste con caja */
+        background: #00ffff; /* caja neón */
+        padding: 8px 15px;
+        border-radius: 8px;
+        margin-top: 10px;
+        margin-right: 10px;
+        transition: 0.3s;
+      }
+      .card a:hover {
+        background: #00cccc;
+        box-shadow: 0 0 8px #00ffff;
+      }
+
+      /* Listas dentro de tarjetas */
+      .card ul {
+        margin: 10px 0 15px 20px; /* separación y sangría */
+      }
+
+      .card li {
+        margin-bottom: 0.6rem;
+      }
+      .card::before,
+      .card::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #00ffff;
+        opacity: 0.5;
+      }
+
+      .card::before {
+        top: 10px;
+        left: 10px;
+        border-right: none;
+        border-bottom: none;
+      }
+
+      .card::after {
+        bottom: 10px;
+        right: 10px;
+        border-left: none;
+        border-top: none;
+      }
+      /* Notas de proyecto */
+      .project-note {
+        font-style: italic;
+        margin-bottom: 1rem;
+      }
+
+      /* Links de proyecto */
+      .project-links a {
+        display: inline-block;
+        text-decoration: none;
+        color: #0a0f25;
+        background: #00ffff;
+        padding: 0 5px 0 5px;
+        border-radius: 6px;
+        margin: 0px 2px 2px 2px;
+        transition: 0.3s;
+        height: 25px;
+      }
+      .project-links a:hover {
+        background: #00cccc;
+        box-shadow: 0 0 6px #00ffff;
+      }
+
+      .card.show {
+        opacity: 1;
+        transform: translateX(-50%) scale(0.85); /* animación a tamaño normal */
+      }
+
+      .skills-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; /* centra todo el bloque de skills */
+        gap: 5px; /* separación entre columnas */
+        margin-top: 10px;
+      }
+
+      .skill-group {
+        width: 100%; /* que cada grupo tome todo el ancho disponible */
+        max-width: 500px; /* opcional, para no ser demasiado ancho */
+        text-align: center; /* centrar el contenido dentro del grupo */
+        list-style: none; /* quitamos las viñetas normales */
+        padding: 0;
+        line-height: 1.6;
+        text-align: left; /* texto alineado a la izquierda dentro de cada grupo */
+        margin: 0px 10px;
+      }
+      .skills-grid ul {
+        margin: 0; /* elimina margen vertical de la lista */
+        padding-left: 20px; /* espacio para el check */
+      }
+
+      .skills-grid ul li {
+        margin: 2px 0; /* reduce espacio entre elementos de la lista */
+        list-style: "✔️ "; /* check al lado del texto */
+      }
+      .skill-group h3 {
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+      }
+
+      .skill-group ul {
+        list-style: none; /* quitar viñetas */
+        padding: 0;
+        line-height: 1.6; /* espacio entre líneas */
+        margin: 0px 0; /* reduce el espacio arriba y abajo de cada lista */
+        padding-left: 20px; /* mantiene espacio para el checkmark */
+      }
+      .skill-group ul li {
+        display: inline-flex; /* permite poner icono y texto en la misma línea */
+        align-items: center; /* verticalmente alineado */
+        gap: 8px; /* separación entre check y texto */
+        font-family: "Arial", sans-serif;
+        font-size: 1rem;
+        margin-bottom: 0px;
+      }
+
+      /* Agregar chulito o check antes de cada li */
+      .skill-group ul li::before {
+        content: "✔"; /* check o ✓ */
+        color: #00ffff; /* color neón cyan */
+        font-weight: bold;
+        text-shadow:
+          0 0 3px #00ffff,
+          0 0 6px #00ffff; /* sombra ligera neón */
+        font-size: 1.1rem;
+        flex-shrink: 0; /* que el check no se achique */
+      }
+      /* Contenedor de slides internos */
+      /* Contenedor con recorte para que no se vea lo que sale */
+      /* Contenedor principal de los slides */
+      .experience-slider {
+        position: relative;
+        min-height: 400px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        padding-bottom: 60px; /* Crea un "escudo" para que el texto no llegue a los botones */
+      }
+
+      /* Estado base de la ficha (oculta y desplazada) */
+      .exp-slide {
+        position: absolute; /* Todas nacen en el mismo punto */
+        top: 0;
+        left: 0;
+        width: 100%;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.5s ease;
+        /* Importante: para que el texto no se amontone */
+        padding-bottom: 20px;
+      }
+
+      /* Estado de la ficha activa (visible) */
+      .exp-slide.show {
+        opacity: 1;
+        visibility: visible;
+        position: relative; /* La activa dicta el espacio si fuera necesario */
+      }
+
+      /* Efecto de parpadeo digital al entrar */
+      @keyframes slideFlicker {
+        0% {
+          opacity: 0;
+          filter: blur(20px);
+        }
+        20% {
+          opacity: 0.8;
+        }
+        40% {
+          opacity: 0.4;
+        }
+        60% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 1;
+          filter: blur(0px);
+        }
+      }
+      @keyframes neonGlow {
+        0% {
+          text-shadow: 0 0 10px #00ffff;
+        }
+        100% {
+          text-shadow: none;
+        }
+      }
+      /* Controles de navegación */
+      /* Panel de controles FIJO */
+      .exp-controls {
+        position: absolute;
+        bottom: 25px; /* Los pega al margen inferior (coincide con el padding de la tarjeta) */
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 50px); /* Ajustado al ancho interno de la tarjeta */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        z-index: 10;
+        background: none; /* Eliminamos fondos para que se vea limpio */
+        border: none;
+      }
+
+      .exp-controls button {
+        background: rgba(0, 255, 255, 0.1);
+        color: #00ffff;
+        border: 1px solid rgba(0, 255, 255, 0.3);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: 0.3s ease;
+      }
+
+      .exp-controls button:hover {
+        background: rgba(0, 255, 255, 0.2);
+        box-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+      }
+
+      #experiencia-card .experience-slider {
+        margin-top: 0;
+      }
+
+      #experiencia-card .job-header {
+        margin-top: 0;
+        padding-top: 0;
+      }
+
+      #experiencia-card article.job {
+        margin-top: 0;
+      }
+      #experiencia-card .job-header h3 {
+        margin-top: 0;
+      }
+      #exp-counter {
+        min-width: 80px;
+        text-align: center;
+        font-family: "Exo 2", sans-serif;
+        letter-spacing: 2px;
+        color: #00ffff;
+      }
+      /* Estilo para los botones deshabilitados (del paso anterior) */
+      .exp-controls button:disabled {
+        opacity: 0.1;
+        cursor: default;
+        box-shadow: none;
+        pointer-events: none;
+        border-color: rgba(0, 255, 255, 0.1);
+      }
+      /* Intro de contacto */
+      .contact-intro {
+        text-align: center;
+        margin-bottom: 25px;
+        font-size: 0.9rem;
+        color: rgba(0, 255, 255, 0.8);
+      }
+
+      /* Contenedor en cuadrícula */
+      .contact-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-top: 10px;
+      }
+
+      /* Bloque individual */
+      .contact-item {
+        display: flex;
+        align-items: center;
+        background: rgba(0, 255, 255, 0.05);
+        border: 1px solid rgba(0, 255, 255, 0.2);
+        padding: 15px;
+        border-radius: 12px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        color: inherit;
+      }
+
+      .contact-item:hover {
+        background: rgba(0, 255, 255, 0.15);
+        border-color: #00ffff;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+        transform: translateY(-3px);
+      }
+
+      .contact-item.no-link:hover {
+        transform: none; /* La ubicación no se mueve al no ser link */
+      }
+
+      /* Caja del icono */
+      .icon-box {
+        font-size: 1.5rem;
+        margin-right: 15px;
+        color: #00ffff;
+        text-shadow: 0 0 10px #00ffff;
+        width: 40px;
+        text-align: center;
+      }
+
+      /* Caja de texto */
+      .info-box {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .info-box span {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: rgba(0, 255, 255, 0.6);
+      }
+
+      .info-box strong {
+        font-size: 0.95rem;
+        word-break: break-all; /* Evita que el email largo rompa el diseño */
+      }
+      /* Descripción superior */
+      .contact-desc {
+        color: #00ffff;
+        opacity: 0.7;
+        font-size: 0.9rem;
+        margin-bottom: 30px;
+        border-left: 2px solid #00ffff;
+        padding-left: 15px;
+      }
+
+      .contact-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      /* El bloque contenedor */
+      .contact-hex {
+        display: flex;
+        align-items: center;
+        padding: 0px;
+        background: rgba(0, 255, 255, 0.03);
+        border: 1px solid rgba(0, 255, 255, 0.2);
+        border-radius: 4px; /* Estilo más cuadrado/tecnológico */
+        text-decoration: none;
+        color: #00ffff;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Efecto de luz al pasar el ratón */
+      .contact-hex:hover {
+        background: rgba(0, 255, 255, 0.1);
+        border-color: #00ffff;
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        transform: scale(1.02);
+      }
+
+      /* Iconos */
+      .hex-icon {
+        width: 30px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        background: rgba(0, 255, 255, 0.1);
+        border-radius: 50%;
+        margin-right: 20px;
+        text-shadow: 0 0 10px #00ffff;
+      }
+
+      /* Textos internos */
+      .hex-text {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+      }
+
+      .hex-text .label {
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        opacity: 0.6;
+      }
+
+      .hex-text .value {
+        font-size: 1.1rem;
+        font-weight: bold;
+      }
+
+      /* Flecha decorativa */
+      .arrow {
+        opacity: 0;
+        transform: translateX(-10px);
+        transition: 0.3s;
+      }
+
+      .contact-hex:hover .arrow {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .no-click {
+        cursor: default;
+      }
+      /* Contenedor principal de habilidades */
+      /* Layout del Dashboard */
+      .skills-dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
+        margin-top: 25px;
+      }
+
+      /* Tarjeta de módulo de habilidad */
+      .skill-module {
+        background: rgba(0, 255, 255, 0.02);
+        border: 1px solid rgba(0, 255, 255, 0.1);
+        padding: 20px;
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      .skill-module:hover {
+        background: rgba(0, 255, 255, 0.08);
+        border-color: #00ffff;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
+      }
+
+      /* Encabezado con icono principal */
+      .module-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 15px;
+        color: #00ffff;
+      }
+
+      .module-header i {
+        font-size: 1.3rem;
+        filter: drop-shadow(0 0 5px #00ffff);
+      }
+
+      .module-header h3 {
+        font-size: 0.95rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+      }
+
+      /* Etiquetas de habilidades */
+      .skill-tags {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .tag {
+        font-family: "Exo 2", sans-serif;
+        font-size: 0.9rem;
+        color: rgba(0, 255, 255, 0.85);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .tag i {
+        font-size: 0.7rem;
+        color: #00ffff;
+        opacity: 0.6;
+      }
+
+      /* Decoración geométrica inferior (rombos) */
+      .module-deco {
+        margin-top: 20px;
+        display: flex;
+        gap: 5px;
+        display: none; /* Esto elimina los rombos visualmente */
+      }
+
+      .module-deco span {
+        width: 8px;
+        height: 8px;
+        border: 1px solid #00ffff;
+        transform: rotate(45deg); /* Crea el rombo */
+        display: inline-block;
+        opacity: 0.3;
+      }
+
+      /* Animación sutil de "escaneo" decorativo */
+      .skill-module::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(0, 255, 255, 0.05),
+          transparent
+        );
+        transition: 0.5s;
+      }
+
+      .skill-module:hover::after {
+        left: 100%;
+        transition: 0.7s;
+      }
+      /* Solo afecta a la tarjeta de Habilidades */
+
+      #habilidades-card h2 {
+        font-size: 2.2rem; /* Título principal un poco más grande */
+      }
+
+      #habilidades-card .module-header h3 {
+        font-size: 1.15rem; /* Títulos de categoría (Gestión, Ofimática, etc) */
+      }
+
+      #habilidades-card .tag {
+        font-size: 1.05rem; /* Las habilidades individuales */
+      }
+
+      #habilidades-card .tag i {
+        font-size: 0.85rem; /* El pequeño icono de flecha */
+      }
+
+      #habilidades-card .module-header i {
+        font-size: 1.4rem; /* Icono principal de cada bloque */
+      }
+      /* Layout Principal */
+      .profile-layout {
+        display: flex;
+        gap: 30px;
+        align-items: center;
+        flex-wrap: wrap; /* Para móviles */
+      }
+
+      /* Marco del Avatar */
+      .avatar-frame {
+        width: 150px;
+        height: 150px;
+        border: 2px solid #00ffff;
+        background: rgba(0, 255, 255, 0.05);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+      }
+
+      .avatar-frame i {
+        font-size: 4rem;
+        color: #00ffff;
+        opacity: 0.8;
+      }
+
+      /* Línea de escaneo animada */
+      .scan-line {
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background: #00ffff;
+        box-shadow: 0 0 10px #00ffff;
+        top: 0;
+        animation: scanning 3s infinite linear;
+      }
+
+      @keyframes scanning {
+        0% {
+          top: 0;
+        }
+        50% {
+          top: 100%;
+        }
+        100% {
+          top: 0;
+        }
+      }
+
+      /* Indicador de Status */
+      .status-indicator {
+        margin-top: 15px;
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+        color: #00ffff;
+        text-align: center;
+      }
+
+      .status-indicator .dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: #00ffff;
+        border-radius: 50%;
+        margin-right: 5px;
+        box-shadow: 0 0 8px #00ffff;
+        animation: pulse 1.5s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      /* Texto y Bio */
+      .profile-main {
+        flex: 1;
+        min-width: 280px;
+      }
+
+      .bio-text p {
+        font-size: 1.05rem;
+        color: #00ffff;
+        margin-bottom: 15px;
+      }
+
+      .bio-text i {
+        color: #00ffff;
+        margin-right: 10px;
+      }
+
+      /* Metadatos inferiores */
+      .profile-meta {
+        display: flex;
+        gap: 20px;
+        border-top: 1px solid rgba(0, 255, 255, 0.2);
+        padding-top: 20px;
+        margin-top: 20px;
+      }
+
+      .meta-item {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .meta-item .label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        color: #00ffff;
+        opacity: 0.6;
+      }
+
+      .meta-item .val {
+        font-size: 0.9rem;
+        font-weight: bold;
+        font-family: "Exo 2", sans-serif;
+      }
+      /* Contenedor del botón */
+      .download-container {
+        margin-top: 30px; /* Un poco más de espacio superior */
+        display: flex;
+        justify-content: center; /* Centra el botón horizontalmente */
+        width: 100%; /* Asegura que ocupe todo el ancho disponible */
+      }
+
+      /* Estilo del botón futurista */
+      .btn-download {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 25px;
+        background: transparent;
+        color: #00ffff;
+        border: 1px solid #00ffff;
+        font-family: "Exo 2", sans-serif;
+        font-size: 0.9rem;
+        font-weight: bold;
+        letter-spacing: 2px;
+        text-decoration: none;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        min-width: 250px;
+        justify-content: center;
+        animation: buttonPulse 2s infinite;
+      }
+      @keyframes buttonPulse {
+        0% {
+          box-shadow: 0 0 5px rgba(0, 255, 255, 0.2);
+        }
+        50% {
+          box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+        100% {
+          box-shadow: 0 0 5px rgba(0, 255, 255, 0.2);
+        }
+      }
+      /* Efecto de relleno al pasar el ratón */
+      .btn-download:hover {
+        background: rgba(0, 255, 255, 0.1);
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        transform: translateY(-2px);
+      }
+
+      /* El pequeño triángulo en la esquina del botón */
+      .btn-corner {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 0 10px 10px;
+        border-color: transparent transparent #00ffff transparent;
+      }
+
+      /* Animación del icono al hacer hover */
+      .btn-download:hover i {
+        animation: bounceDown 0.6s infinite;
+      }
+
+      @keyframes bounceDown {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(3px);
+        }
+      }
+
+      /* Ajuste móvil para que el botón se centre si es necesario */
+      @media (max-width: 600px) {
+        .download-container {
+          justify-content: center;
+        }
+      }
+
+      @keyframes neon-glow {
+        from {
+          text-shadow:
+            0 0 5px #00ffff,
+            0 0 10px #00ffff;
+        }
+        to {
+          text-shadow:
+            0 0 15px #00ffff,
+            0 0 25px #00ffff;
+        }
+      }
+      @keyframes glitch-opacity {
+        0% {
+          opacity: 0.8;
+        }
+        45% {
+          opacity: 0.8;
+        }
+        50% {
+          opacity: 0.4;
+        }
+        55% {
+          opacity: 0.9;
+        }
+        100% {
+          opacity: 0.8;
+        }
+      }
+
+      .avatar-frame i {
+        animation: glitch-opacity 4s infinite; /* El icono del usuario parpadeará suavemente */
+      }
+      ::selection {
+        background: rgba(0, 255, 255, 0.3);
+        color: #ffffff;
+        text-shadow: 0 0 5px #00ffff;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link rel="icon" href="favicon.png" type="image/png" />
+  </head>
+  <body>
+    <canvas id="particles"></canvas>
+
+    <!-- Cuenta atrás -->
+    <div id="countdown-container">
+      <div id="countdown"></div>
+    </div>
+
+    <header>
+      <h1 id="brand-name">Víctor Vargas Cadaveira</h1>
+      <p id="brand-subtitle">
+        Asistente Administrativo Digital · Organización, Ofimática y Soporte Web
+      </p>
+      <nav class="main-nav">
+        <a href="#perfil">Perfil</a>
+        <a href="#experiencia">Experiencia</a>
+        <a href="#habilidades">Habilidades</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="card" id="perfil-card">
+        <div class="profile-layout">
+          <div class="profile-side">
+            <div class="avatar-frame">
+              <i class="fas fa-user-shield"></i>
+              <div class="scan-line"></div>
+            </div>
+            <div class="status-indicator">
+              <span class="dot"></span> SISTEMA ACTIVO
+            </div>
+          </div>
+
+          <div class="profile-main">
+            <h2>Perfil del Operador</h2>
+            <div class="bio-text">
+              <p>
+                <i class="fas fa-terminal"></i>
+                <strong>Especialidad:</strong> Soporte Administrativo &
+                Estrategia Digital.
+              </p>
+              <p>
+                Especializado en ofimática avanzada y soporte administrativo
+                digital, con experiencia real en desarrollo web, SEO, WordPress
+                y visibilidad online aplicada a proyectos propios en España y
+                Colombia.
+              </p>
+              <p>
+                Profesional administrativo-digital con amplia experiencia en
+                gestión administrativa, documentación, facturación y
+                organización de procesos en entornos remotos.
+              </p>
+            </div>
+
+            <div class="profile-meta">
+              <div class="meta-item">
+                <span class="label">Rango</span>
+                <span class="val">Senior Admin</span>
+              </div>
+              <div class="meta-item">
+                <span class="label">Sector</span>
+                <span class="val">Global / Remoto</span>
+              </div>
+              <div class="meta-item">
+                <span class="label">Estado CV</span>
+                <span class="val">Disponible</span>
+              </div>
+            </div>
+
+            <div class="download-container">
+              <a href="docs/Victor-Vargas-CV.pdf" download class="btn-download">
+                <span class="btn-glitch-effect"></span>
+                <i class="fas fa-file-download"></i> DESCARGAR DOSSIER CV
+                <span class="btn-corner"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card" id="experiencia-card">
+        <h2>Experiencia</h2>
+
+        <!-- Contenedor de slides internos de experiencia -->
+        <div class="experience-slider">
+          <!-- Bloque experiencia 2025-Actualidad -->
+          <div class="exp-slide show" id="exp-2025">
+            <article class="job">
+              <header class="job-header">
+                <h3>Gestión digital y administrativa de proyectos propios</h3>
+                <span class="job-meta">2025 – Actualidad · Colombia</span>
+              </header>
+              <ul>
+                <li>Gestión administrativa y organización de información.</li>
+
+                <li>Desarrollo y mantenimiento de sitios web corporativos.</li>
+                <li>
+                  Gestión de visibilidad digital, SEO y Google Business Profile
+                  y buscadores.
+                </li>
+
+                <li>Proyecto Kadaveira Digital</li>
+                <div class="project-links">
+                  <a href="https://kadaveiradigital.free.nf/" target="_blank"
+                    >Web</a
+                  >
+                </div>
+                <li>
+                  Proyecto Ricaurte Mascotas y gestión de documentación de
+                  mascotas
+                </li>
+
+                <div class="project-links">
+                  <a href="https://ricaurtemascotas.free.nf/" target="_blank"
+                    >Web</a
+                  >
+                  <a href="https://viajemascotasibague.free.nf/" target="_blank"
+                    >Viajes</a
+                  >
+                  <a
+                    href="https://share.google/UqoNv5jTUXGJyoYRl"
+                    target="_blank"
+                    >Google Maps</a
+                  >
+                  <a
+                    href="https://www.facebook.com/RicaurteMascotas"
+                    target="_blank"
+                    >Facebook</a
+                  >
+                  <a
+                    href="https://www.instagram.com/ricaurtemascotasibague/"
+                    target="_blank"
+                    >Instagram</a
+                  >
+                  <a href="https://wa.me/573223442158" target="_blank"
+                    >WhatsApp</a
+                  >
+                </div>
+                <br />
+                <li>Proyecto Animalandia Centro Veterinario</li>
+                <div class="project-links">
+                  <a href="https://animalandiavet.free.nf/" target="_blank"
+                    >Web</a
+                  >
+                  <a
+                    href="https://share.google/T0ZWPqGuXI8YGlvjR"
+                    target="_blank"
+                    >Google Maps</a
+                  >
+                  <a
+                    href="https://www.facebook.com/AnimalandiaIbague"
+                    target="_blank"
+                    >Facebook</a
+                  >
+                </div>
+              </ul>
+            </article>
+          </div>
+
+          <!-- Bloque experiencia 2017-2024 -->
+          <div class="exp-slide" id="exp-2017">
+            <article class="job">
+              <header class="job-header">
+                <h3>Gestión de negocios y proyectos personales</h3>
+                <span class="job-meta">2017 – 2024 · Colombia</span>
+              </header>
+              <ul>
+                <li>
+                  Gestión integral de negocio propio y proyectos personales.
+                </li>
+                <li>
+                  Administración, facturación, control de gastos y organización
+                  documental.
+                </li>
+                <li>
+                  Redacción de contenidos, escritura creativa y autopublicación
+                  en Amazon KDP.
+                </li>
+              </ul>
+            </article>
+          </div>
+
+          <!-- Bloque experiencia 2002-2017 -->
+          <div class="exp-slide" id="exp-2002">
+            <article class="job">
+              <header class="job-header">
+                <h3>Detectives Kadaveisa</h3>
+                <span class="job-meta"
+                  >2002 – 2017 · España · Gestión administrativa y digital</span
+                >
+              </header>
+              <ul>
+                <li>Gestión integral del negocio durante más de 15 años.</li>
+                <li>
+                  Elaboración de informes profesionales y documentación técnica.
+                </li>
+                <li>
+                  Facturación, control de pagos, impuestos y gestión
+                  contractual.
+                </li>
+                <li>
+                  Desarrollo y mantenimiento de la web corporativa y
+                  posicionamiento SEO.
+                </li>
+              </ul>
+            </article>
+          </div>
+
+          <!-- Controles de navegación -->
+          <div class="exp-controls">
+            <button id="prev-exp" aria-label="Anterior">◀</button>
+            <span id="exp-counter">1 - 3</span>
+            <button id="next-exp" aria-label="Siguiente">▶</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="habilidades-card">
+        <h2>
+          <i class="fas fa-terminal" style="margin-right: 15px"></i>Sistemas de
+          Competencias
+        </h2>
+
+        <div class="skills-dashboard">
+          <div class="skill-module">
+            <div class="module-header">
+              <i class="fas fa-network-wired"></i>
+              <h3>Web & Visibilidad</h3>
+            </div>
+            <div class="skill-tags">
+              <span class="tag"
+                ><i class="fas fa-caret-right"></i> HTML/CSS/PHP/MySQL/JS
+              </span>
+              <span class="tag"
+                ><i class="fas fa-caret-right"></i> SEO On-page/WordPress</span
+              >
+              <span class="tag"
+                ><i class="fas fa-caret-right"></i> Google Business</span
+              >
+            </div>
+            <div class="module-deco">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="skill-module">
+            <div class="module-header">
+              <i class="fas fa-folder-open"></i>
+              <h3>Gestión Datos</h3>
+            </div>
+            <div class="skill-tags">
+              <span class="tag"
+                ><i class="fas fa-caret-right"></i> Gestión documental</span
+              >
+              <span class="tag"
+                ><i class="fas fa-caret-right"></i> Informes técnicos</span
+              >
+              <span class="tag"
+                ><i class="fas fa-caret-right"></i> Bases de datos</span
+              >
+            </div>
+            <div class="module-deco">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+
+          <div class="skill-module">
+            <div class="module-header">
+              <i class="fas fa-microchip"></i>
+              <h3>Ofimática Avanzada</h3>
+            </div>
+            <div class="skill-tags">
+              <span class="tag"
+                ><i class="fas fa-caret-right"></i> Word / Excel / Access
+                Pro</span
+              >
+              <span class="tag"
+                ><i class="fas fa-caret-right"></i> PowerPoint / Microsoft
+                365</span
+              >
+              <span class="tag"
+                ><i class="fas fa-caret-right"></i> Automatización de
+                procesos</span
+              >
+            </div>
+            <div class="module-deco">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+
+          <div class="skill-module">
+            <div class="module-header">
+              <i class="fas fa-comment-dots"></i>
+              <h3>Comunicación</h3>
+            </div>
+            <div class="skill-tags">
+              <span class="tag"
+                ><i class="fas fa-caret-right"></i> Redacción Pro</span
+              >
+              <span class="tag"
+                ><i class="fas fa-caret-right"></i> Gestión RRSS</span
+              >
+              <span class="tag"
+                ><i class="fas fa-caret-right"></i> Amazon KDP</span
+              >
+            </div>
+            <div class="module-deco">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card" id="contacto-card">
+        <h2>
+          <i
+            class="fas fa-satellite-dish"
+            style="margin-right: 15px; font-size: 1.5rem"
+          ></i
+          >Contacto
+        </h2>
+        <p class="contact-desc">
+          Disponible para trabajo remoto como asistente administrativo digital y
+          soporte web.
+        </p>
+
+        <div class="contact-container">
+          <a href="mailto:kadaveira@gmail.com" class="contact-hex">
+            <div class="hex-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="hex-text">
+              <span class="label">Canal de Comunicación</span>
+              <span class="value">kadaveira@gmail.com</span>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+          </a>
+
+          <a
+            href="https://linkedin.com/in/vargas-cadaveira"
+            target="_blank"
+            class="contact-hex"
+          >
+            <div class="hex-icon">
+              <i class="fab fa-linkedin-in"></i>
+            </div>
+            <div class="hex-text">
+              <span class="label">Red Profesional</span>
+              <span class="value">vargas-cadaveira</span>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+          </a>
+
+          <div class="contact-hex no-click">
+            <div class="hex-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="hex-text">
+              <span class="label">Base de Operaciones</span>
+              <span class="value">Colombia · Remoto</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      /* Partículas de fondo */
+      const canvas = document.getElementById("particles");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const particles = [];
+      for (let i = 0; i < 150; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 2 + 1,
+          dx: (Math.random() - 0.5) * 1,
+          dy: (Math.random() - 0.5) * 1,
+          alpha: Math.random() * 0.5 + 0.5,
+        });
+      }
+      function animate() {
+        ctx.fillStyle = "rgba(10,15,37,0.3)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((p) => {
+          p.x += p.dx;
+          p.y += p.dy;
+          if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+          if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
+          grad.addColorStop(0, `rgba(0,255,255,${p.alpha})`);
+          grad.addColorStop(0.5, `rgba(0,255,255,${p.alpha / 2})`);
+          grad.addColorStop(1, "rgba(0,255,255,0)");
+          ctx.fillStyle = grad;
+          ctx.fill();
+        });
+        requestAnimationFrame(animate);
+      }
+      animate();
+      window.addEventListener("resize", () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      });
+
+      /* --- SISTEMA DE ENTRADA SINCRONIZADO --- */
+      const countdownEl = document.getElementById("countdown");
+      const countdownContainer = document.getElementById("countdown-container");
+      const nameEl = document.getElementById("brand-name");
+      const subEl = document.getElementById("brand-subtitle");
+      const nav = document.querySelector(".main-nav");
+
+      let count = 3;
+
+      // 1. Manejo de la Cuenta Atrás
+      const countInterval = setInterval(() => {
+        countdownEl.textContent = count;
+        count--;
+
+        if (count < -1) {
+          clearInterval(countInterval);
+          countdownContainer.style.display = "none";
+          startTechnicalTyping(); // Inicia la secuencia
+        }
+      }, 600);
+
+      // 2. Función de escritura (Lenta y con brillo progresivo)
+      function startTechnicalTyping() {
+        const text = "Víctor Vargas Cadaveira";
+        nameEl.style.visibility = "visible";
+        nameEl.innerHTML =
+          '<span id="typing-text"></span><span class="cursor">&nbsp;</span>';
+
+        const typingTarget = document.getElementById("typing-text");
+        let charIndex = 0;
+
+        function type() {
+          if (charIndex < text.length) {
+            // Crear letra con efecto de encendido
+            const span = document.createElement("span");
+            span.textContent = text[charIndex];
+            span.style.color = "rgba(0,255,255,0.2)";
+            span.style.transition = "all 0.4s ease";
+
+            typingTarget.appendChild(span);
+
+            // Iluminar la letra casi al instante
+            setTimeout(() => {
+              span.style.color = "#00ffff";
+              span.style.textShadow = "0 0 15px #00ffff";
+            }, 50);
+
+            charIndex++;
+            setTimeout(type, 100); // Velocidad pausada
+          } else {
+            // Final de la escritura
+            document.querySelector(".cursor").style.display = "none";
+            finishSequence();
+          }
+        }
+        type();
+      }
+
+      // 3. Finalizar con subtítulo y menú
+      function finishSequence() {
+        subEl.style.transition = "all 1.5s ease";
+        subEl.style.opacity = "1";
+        subEl.style.transform = "translateY(0)";
+
+        setTimeout(() => {
+          nav.classList.add("show");
+        }, 1000);
+      }
+      /* Tarjetas al pulsar navbar */
+      const navButtons = document.querySelectorAll(".main-nav a");
+      const cards = document.querySelectorAll(".card");
+      navButtons.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const target = btn.getAttribute("href").substring(1) + "-card";
+          cards.forEach((c) => c.classList.remove("show"));
+          document.getElementById(target).classList.add("show");
+          document
+            .getElementById(target)
+            .scrollIntoView({ behavior: "smooth", block: "nearest" });
+        });
+      });
+      /* Referencias únicas */
+      /* --- LÓGICA DE EXPERIENCIA CORREGIDA --- */
+      const expSlides = document.querySelectorAll(
+        "#experiencia-card .exp-slide",
+      );
+      const expCounter = document.getElementById("exp-counter");
+      const btnPrev = document.getElementById("prev-exp");
+      const btnNext = document.getElementById("next-exp");
+      let currentExpIndex = 0;
+
+      function showExperience(index, direction = "next") {
+        // 1. Verificación de seguridad
+        if (!expSlides.length) return;
+
+        // 2. Limpieza total de estados previos
+        expSlides.forEach((slide) => {
+          slide.classList.remove("show");
+          slide.style.display = "none";
+        });
+
+        // 3. Activar la ficha seleccionada
+        const activeSlide = expSlides[index];
+        if (activeSlide) {
+          activeSlide.style.display = "block";
+
+          // Timeout para permitir que el navegador anime la entrada
+          setTimeout(() => {
+            activeSlide.classList.add("show");
+          }, 10);
+        }
+
+        // 4. Actualizar el contador (Ej: "1 - 3")
+        if (expCounter) {
+          expCounter.textContent = `${index + 1} - ${expSlides.length}`;
+        }
+
+        // 5. Control de estados de los botones (Bloqueo en los extremos)
+        if (btnPrev) btnPrev.disabled = index === 0;
+        if (btnNext) btnNext.disabled = index === expSlides.length - 1;
+      }
+
+      // Evento Botón Siguiente
+      btnNext.addEventListener("click", () => {
+        if (currentExpIndex < expSlides.length - 1) {
+          currentExpIndex++;
+          showExperience(currentExpIndex, "next");
+        }
+      });
+
+      // Evento Botón Anterior
+      btnPrev.addEventListener("click", () => {
+        if (currentExpIndex > 0) {
+          currentExpIndex--;
+          showExperience(currentExpIndex, "prev");
+        }
+      });
+
+      // Inicialización: Mostrar la primera ficha al cargar
+      // Esperar a que la página cargue totalmente
+      window.addEventListener("load", () => {
+        // Establecemos un retraso de 6.5 segundos (6500 milisegundos)
+        setTimeout(() => {
+          const perfilCard = document.getElementById("perfil-card");
+
+          if (perfilCard) {
+            // 1. Ocultar cualquier otra tarjeta que pudiera estar abierta por error
+            document
+              .querySelectorAll(".card")
+              .forEach((c) => c.classList.remove("show"));
+
+            // 2. Mostrar la tarjeta de perfil con el efecto de transición
+            perfilCard.classList.add("show");
+
+            // 3. Hacer scroll suave hacia la tarjeta para que el usuario la vea aparecer
+            perfilCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+            console.log("Sistema cargado: Perfil del operador desplegado.");
+          }
+        }, 7500); // 6.5 segundos de espera
+      });
+    </script>
+  </body>
+</html>
