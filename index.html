@@ -276,15 +276,14 @@
         </div>
       </section>
     </main>
-    <footer>
-      <a href="docs/Victor-Vargas-CV.pdf" class="btn-cv small" download
-        >Descargar CV</a
-      >
-    </footer>
 
     <script>
-      // Lógica de intercambio de tarjetas
       const navButtons = document.querySelectorAll(".nav-btn");
+
+      document
+        .querySelector(".nav-btn[data-target='perfil']")
+        .classList.add("active");
+
       navButtons.forEach((btn) => {
         btn.addEventListener("click", (e) => {
           e.preventDefault();
@@ -294,28 +293,42 @@
 
           if (targetSection === currentSection) return;
 
-          currentSection.classList.add("page-flip-exit");
+          // ----- NUEVO: quitar active de todos los botones -----
+          navButtons.forEach((b) => b.classList.remove("active"));
+          // Añadir active al botón pulsado
+          btn.classList.add("active");
+
+          // 1. Desvanecer la tarjeta actual
+          currentSection.style.transition =
+            "opacity 0.35s ease, transform 0.35s ease";
+          currentSection.style.opacity = "0";
+          currentSection.style.transform = "scale(0.96)";
+
+          // 2. Esperar a que termine el fade out
           setTimeout(() => {
-            currentSection.classList.remove("active", "page-flip-exit");
-            targetSection.classList.add("active", "page-flip-enter");
+            // Quitar clase active y resetear estilos inline
+            currentSection.classList.remove("active");
+            currentSection.style.opacity = "";
+            currentSection.style.transform = "";
+
+            // Activar la nueva tarjeta y prepararla para el fade in
+            targetSection.classList.add("active");
+            targetSection.style.transition =
+              "opacity 0.35s ease, transform 0.35s ease";
+            targetSection.style.opacity = "0";
+            targetSection.style.transform = "scale(0.96)";
+
+            // Forzar un reflow para que la transición se aplique
+            requestAnimationFrame(() => {
+              targetSection.style.opacity = "1";
+              targetSection.style.transform = "scale(1)";
+            });
+
+            // Scroll al inicio (opcional)
             window.scrollTo({ top: 0, behavior: "smooth" });
-            setTimeout(() => {
-              targetSection.classList.remove("page-flip-enter");
-            }, 600);
-          }, 500);
+          }, 350);
         });
       });
-
-      // Lógica del Matojo Rodante (Tumbleweed)
-      const tumbleweed = document.querySelector(".tumbleweed");
-      function animateTumbleweed() {
-        if (!tumbleweed) return;
-        tumbleweed.style.animation = "none";
-        tumbleweed.offsetHeight;
-        tumbleweed.style.animation = "roll 8s linear forwards";
-      }
-      setTimeout(animateTumbleweed, 3000);
-      setInterval(animateTumbleweed, 30000);
     </script>
   </body>
 </html>
