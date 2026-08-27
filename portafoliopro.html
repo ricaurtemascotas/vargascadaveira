@@ -1565,15 +1565,26 @@
       /* Tarjetas al pulsar navbar */
       const navButtons = document.querySelectorAll(".main-nav a");
       const cards = document.querySelectorAll(".card");
+
       navButtons.forEach((btn) => {
         btn.addEventListener("click", (e) => {
           e.preventDefault();
-          const target = btn.getAttribute("href").substring(1) + "-card";
-          cards.forEach((c) => c.classList.remove("show"));
-          document.getElementById(target).classList.add("show");
-          document
-            .getElementById(target)
-            .scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+          const targetId = btn.getAttribute("href").substring(1) + "-card";
+          const targetCard = document.getElementById(targetId);
+
+          if (!targetCard) return;
+
+          cards.forEach((card) => {
+            card.classList.remove("show");
+          });
+
+          targetCard.classList.add("show");
+
+          targetCard.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+          });
         });
       });
       /* Referencias únicas */
@@ -1631,30 +1642,6 @@
           currentExpIndex--;
           showExperience(currentExpIndex, "prev");
         }
-      });
-
-      // Inicialización: Mostrar la primera ficha al cargar
-      // Esperar a que la página cargue totalmente
-      window.addEventListener("load", () => {
-        // Establecemos un retraso de 6.5 segundos (6500 milisegundos)
-        setTimeout(() => {
-          const perfilCard = document.getElementById("perfil-card");
-
-          if (perfilCard) {
-            // 1. Ocultar cualquier otra tarjeta que pudiera estar abierta por error
-            document
-              .querySelectorAll(".card")
-              .forEach((c) => c.classList.remove("show"));
-
-            // 2. Mostrar la tarjeta de perfil con el efecto de transición
-            perfilCard.classList.add("show");
-
-            // 3. Hacer scroll suave hacia la tarjeta para que el usuario la vea aparecer
-            perfilCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
-
-            console.log("Sistema cargado: Perfil del operador desplegado.");
-          }
-        }, 7500); // 6.5 segundos de espera
       });
     </script>
   </body>
@@ -3307,33 +3294,6 @@
             currentExpIndex--;
             showExperience(currentExpIndex, "prev");
           }
-        });
-
-        // Inicialización: Mostrar la primera ficha al cargar
-        // Esperar a que la página cargue totalmente
-        window.addEventListener("load", () => {
-          // Establecemos un retraso de 6.5 segundos (6500 milisegundos)
-          setTimeout(() => {
-            const perfilCard = document.getElementById("perfil-card");
-
-            if (perfilCard) {
-              // 1. Ocultar cualquier otra tarjeta que pudiera estar abierta por error
-              document
-                .querySelectorAll(".card")
-                .forEach((c) => c.classList.remove("show"));
-
-              // 2. Mostrar la tarjeta de perfil con el efecto de transición
-              perfilCard.classList.add("show");
-
-              // 3. Hacer scroll suave hacia la tarjeta para que el usuario la vea aparecer
-              perfilCard.scrollIntoView({
-                behavior: "smooth",
-                block: "nearest",
-              });
-
-              console.log("Sistema cargado: Perfil del operador desplegado.");
-            }
-          }, 7500); // 6.5 segundos de espera
         });
       </script>
     </body>
