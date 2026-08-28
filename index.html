@@ -276,58 +276,165 @@
         </div>
       </section>
     </main>
-
+    <!-- Overlay para móvil -->
+    <div id="modal-overlay">
+      <div id="modal-content">
+        <button id="modal-close" aria-label="Cerrar">✕</button>
+        <div id="modal-card"></div>
+      </div>
+    </div>
     <script>
+      // --- Utilidades ---
+      function isMobile() {
+        return window.innerWidth <= 768;
+      }
+
+      // --- Referencias ---
       const navButtons = document.querySelectorAll(".nav-btn");
+      const overlay = document.getElementById("modal-overlay");
+      const modalCard = document.getElementById("modal-card");
+      const closeBtn = document.getElementById("modal-close");
 
-      document
-        .querySelector(".nav-btn[data-target='perfil']")
-        .classList.add("active");
+      let currentModalTarget = null; // id de la tarjeta abierta en el modal
 
+      // --- Funciones del modal ---
+      function openModal(targetId) {
+        const targetSection = document.getElementById(targetId);
+        if (!targetSection) return;
+
+        // Si ya hay una tarjeta en el modal, la devolvemos al flujo
+        if (modalCard.firstChild) {
+          const oldCard = modalCard.firstChild;
+          oldCard.classList.remove("active");
+          document.querySelector(".site-main").appendChild(oldCard);
+          oldCard.style.display = "none";
+        }
+
+        // Mover la nueva tarjeta al modal
+        targetSection.style.display = "block"; // asegurar que sea visible
+        modalCard.appendChild(targetSection);
+        targetSection.classList.add("active");
+
+        // Mostrar overlay
+        overlay.style.display = "flex";
+        currentModalTarget = targetId;
+
+        // Actualizar botones activos
+        navButtons.forEach((b) => b.classList.remove("active"));
+        document
+          .querySelector(`.nav-btn[data-target="${targetId}"]`)
+          ?.classList.add("active");
+      }
+
+      function closeModal() {
+        if (modalCard.firstChild) {
+          const card = modalCard.firstChild;
+          card.classList.remove("active");
+          document.querySelector(".site-main").appendChild(card);
+          card.style.display = "none";
+        }
+        overlay.style.display = "none";
+        currentModalTarget = null;
+
+        // Quitar active de todos los botones (opcional)
+        navButtons.forEach((b) => b.classList.remove("active"));
+      }
+
+      // --- Eventos de navegación ---
       navButtons.forEach((btn) => {
         btn.addEventListener("click", (e) => {
           e.preventDefault();
           const targetId = btn.getAttribute("data-target");
-          const targetSection = document.getElementById(targetId);
-          const currentSection = document.querySelector(".section.active");
 
-          if (targetSection === currentSection) return;
+          if (isMobile()) {
+            openModal(targetId);
+          } else {
+            // --- Comportamiento PC (transición fade original) ---
+            const targetSection = document.getElementById(targetId);
+            const currentSection = document.querySelector(".section.active");
+            if (targetSection === currentSection) return;
 
-          // ----- NUEVO: quitar active de todos los botones -----
-          navButtons.forEach((b) => b.classList.remove("active"));
-          // Añadir active al botón pulsado
-          btn.classList.add("active");
-
-          // 1. Desvanecer la tarjeta actual
-          currentSection.style.transition =
-            "opacity 0.35s ease, transform 0.35s ease";
-          currentSection.style.opacity = "0";
-          currentSection.style.transform = "scale(0.96)";
-
-          // 2. Esperar a que termine el fade out
-          setTimeout(() => {
-            // Quitar clase active y resetear estilos inline
-            currentSection.classList.remove("active");
-            currentSection.style.opacity = "";
-            currentSection.style.transform = "";
-
-            // Activar la nueva tarjeta y prepararla para el fade in
-            targetSection.classList.add("active");
-            targetSection.style.transition =
+            // Desvanecer actual
+            currentSection.style.transition =
               "opacity 0.35s ease, transform 0.35s ease";
-            targetSection.style.opacity = "0";
-            targetSection.style.transform = "scale(0.96)";
+            currentSection.style.opacity = "0";
+            currentSection.style.transform = "scale(0.96)";
 
-            // Forzar un reflow para que la transición se aplique
-            requestAnimationFrame(() => {
-              targetSection.style.opacity = "1";
-              targetSection.style.transform = "scale(1)";
-            });
+            setTimeout(() => {
+              currentSection.classList.remove("active");
+              currentSection.style.opacity = "";
+              currentSection.style.transform = "";
 
-            // Scroll al inicio (opcional)
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }, 350);
+              targetSection.classList.add("active");
+              targetSection.style.transition =
+                "opacity 0.35s ease, transform 0.35s ease";
+              targetSection.style.opacity = "0";
+              targetSection.style.transform = "scale(0.96)";
+
+              requestAnimationFrame(() => {
+                targetSection.style.opacity = "1";
+                targetSection.style.transform = "scale(1)";
+              });
+
+              // Scroll al inicio solo en PC
+              if (window.innerWidth > 768) {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }
+            }, 350);
+
+            // Actualizar botón activo en PC
+            navButtons.forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+          }
         });
+      });
+
+      // --- Cerrar modal ---
+      closeBtn.addEventListener("click", closeModal);
+
+      overlay.addEventListener("click", function (e) {
+        if (e.target === overlay) closeModal();
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (
+          e.key === "Escape" &&
+          isMobile() &&
+          overlay.style.display === "flex"
+        ) {
+          closeModal();
+        }
+      });
+
+      // --- Al cargar la página ---
+      if (isMobile()) {
+        // Abrir perfil automáticamente
+        openModal("perfil");
+      } else {
+        // En PC, marcar perfil como activo y mostrarlo
+        const perfil = document.getElementById("perfil");
+        if (perfil) perfil.classList.add("active");
+        document
+          .querySelector(".nav-btn[data-target='perfil']")
+          ?.classList.add("active");
+      }
+
+      // --- Al redimensionar la ventana ---
+      window.addEventListener("resize", function () {
+        const nowMobile = isMobile();
+        if (!nowMobile && overlay.style.display === "flex") {
+          // Si pasamos a PC con modal abierto, lo cerramos y mostramos perfil en el flujo
+          closeModal();
+          document.getElementById("perfil").style.display = "block";
+          document.getElementById("perfil").classList.add("active");
+          navButtons.forEach((b) => b.classList.remove("active"));
+          document
+            .querySelector(".nav-btn[data-target='perfil']")
+            ?.classList.add("active");
+        } else if (nowMobile && !overlay.style.display === "flex") {
+          // Si pasamos a móvil y no hay modal abierto, abrir perfil
+          openModal("perfil");
+        }
       });
     </script>
   </body>
